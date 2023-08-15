@@ -1,0 +1,43 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: ${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
+      - name: Install Gradle
+        run: gradle install
+      - name: Build Docker image
+        run: docker build -t todo-java .
+      - name: Tag Docker image
+        run: docker tag todo-java latest
+      - name: Push Docker image to Docker Hub
+        run: docker push earincon/todo-java
+
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up Java
+          uses: actions/setup-java@v1
+          with:
+            java-version: 17
+        - name: Install Gradle
+          run: gradle install
+        - name: Run tests
+          run: gradle test
