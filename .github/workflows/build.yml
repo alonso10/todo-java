@@ -29,15 +29,15 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push earincon/todo-java
 
-    test:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Java
-          uses: actions/setup-java@v1
-          with:
-            java-version: 17
-        - name: Install Gradle
-          run: gradle install
-        - name: Run tests
-          run: gradle test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Install Gradle
+        run: gradle install
+      - name: Run tests
+        run: gradle test
