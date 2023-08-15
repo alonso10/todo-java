@@ -32,3 +32,8 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+task install(type: Copy) {
+    from('build/libs')
+    into('install')
+}
