@@ -1,13 +1,9 @@
-FROM openjdk:17-jdk-alpine
-
-RUN apk update && apk add --no-cache bash gradle
+FROM amazoncorretto:17
 
 WORKDIR /app
 
 COPY . .
 
-RUN gradle build
+RUN ./gradlew build
 
-EXPOSE 8080
-
-CMD ["java", "-jar", "build/libs/todo-java-0.0.1-SNAPSHOT.jar"]
+CMD java -jar build/libs/todo-java-0.0.1-SNAPSHOT.jar0.0.1-SNAPSHOT.jar
