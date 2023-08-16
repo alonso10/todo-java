@@ -28,7 +28,7 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build Docker image
-        run: docker build -t todo-java .
+        run: docker build -t ${{secrets.DOCKER_USER}}/todo-java .
       - name: Push Docker image to Docker Hub
         run: docker push ${{secrets.DOCKER_USER}}/todo-java:latest
 
