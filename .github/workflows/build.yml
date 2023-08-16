@@ -22,12 +22,17 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
       - name: Install Gradle
         run: gradle install
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build Docker image
         run: docker build -t todo-java .
       - name: Tag Docker image
         run: docker tag todo-java latest
       - name: Push Docker image to Docker Hub
-        run: docker push earincon/todo-java
+        run: docker push earincon/todo-java:latest
 
   test:
     runs-on: ubuntu-latest
