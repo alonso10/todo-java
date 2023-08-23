@@ -14,7 +14,33 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+
+      - name: Run Tests
+        run: ./gradlew test
+        working-directory: JVM/intellij-coverage-agent/gradle
+
+      - name: Create coverage-data directory and copy contents
+        run: |
+          mkdir -p JVM/intellij-coverage-agent/gradle/.qodana/code-coverage
+          cp -R JVM/intellij-coverage-agent/gradle/build/kover/bin-reports/* JVM/intellij-coverage-agent/gradle/.qodana/code-coverage/
+
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v2
+        with:
+          name: gradle-coverage-data.zip
+          path: JVM/intellij-coverage-agent/gradle/.qodana/code-coverage
+
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: "-i,JVM/intellij-coverage-agent/gradle,--linter,jetbrains/qodana-jvm:2023.2-eap"
+          pr-mode: false
