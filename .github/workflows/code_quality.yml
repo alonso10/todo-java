@@ -25,11 +25,17 @@ jobs:
       - name: Run Tests
         run: ./gradlew test
 
+      - name: Run Qodana
+        uses: JetBrains/qodana-action@v2023.2
+        with:
+          command: coverage
+          args: "--report-file=covegare.xml"
+
       - name: Archive coverage data
         uses: actions/upload-artifact@v2
         with:
           name: gradle-coverage-data
-          path: .qodana/code-coverage
+          path: coverage.xml
 
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
