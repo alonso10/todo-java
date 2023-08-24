@@ -28,7 +28,7 @@ public class Identifier {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Identifier that = (Identifier) o;
-        return Objects.equals(value, this.value);
+        return value.equals(that.value);
     }
 
     @Override
