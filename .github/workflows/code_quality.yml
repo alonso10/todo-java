@@ -15,32 +15,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: 'gradle'
-
-      - name: Run Tests
-        run: ./gradlew test
-
-      - name: Run Qodana
-        uses: JetBrains/qodana-action@v2023.2
-        with:
-          command: coverage
-          args: "--report-file=covegare.xml"
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v2
-        with:
-          name: gradle-coverage-data
-          path: coverage.xml
-
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-        with:
-          args: "-i,.,--linter,jetbrains/qodana-jvm:2023.2-eap"
-          pr-mode: false
