@@ -9,6 +9,33 @@ on:
       - main
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Install Gradle
+        run: gradle install
+      - name: Run tests
+        run: gradle test
+
+  qodana:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -35,18 +62,3 @@ jobs:
         run: docker build -t ${{secrets.DOCKER_USER}}/todo-java .
       - name: Push Docker image to Docker Hub
         run: docker push ${{secrets.DOCKER_USER}}/todo-java:latest
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: 'gradle'
-      - name: Install Gradle
-        run: gradle install
-      - name: Run tests
-        run: gradle test
