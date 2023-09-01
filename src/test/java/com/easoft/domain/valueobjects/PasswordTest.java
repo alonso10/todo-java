@@ -3,6 +3,7 @@ package com.easoft.domain.valueobjects;
 import com.easoft.domain.exceptions.EmptyException;
 import com.easoft.domain.exceptions.LengthException;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PasswordTest {

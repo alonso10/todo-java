@@ -1,9 +1,9 @@
 package com.easoft.domain.valueobjects;
 
-import java.util.Objects;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Identifier {
+public class Identifier implements Serializable {
 
     private final UUID value;
 
