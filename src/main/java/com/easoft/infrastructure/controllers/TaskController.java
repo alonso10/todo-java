@@ -1,5 +1,6 @@
 package com.easoft.infrastructure.controllers;
 
+import com.easoft.application.task.CreateTask;
 import com.easoft.application.task.FetchTaskByID;
 import com.easoft.domain.entities.Task;
 import com.easoft.domain.repositories.TaskRepository;
@@ -14,22 +15,23 @@ import java.util.Map;
 
 @RestController
 public class TaskController {
-    @Autowired
-    private TaskRepository repository;
+
+    private final CreateTask createTaskService;
+    private final FetchTaskByID fetchTaskByID;
 
     @Autowired
-    private FetchTaskByID fetchTaskByID;
+    public TaskController(
+            CreateTask createTaskService,
+            FetchTaskByID fetchTaskByID
+    ) {
+        this.createTaskService = createTaskService;
+        this.fetchTaskByID = fetchTaskByID;
+    }
 
 
     @PostMapping("/task")
     public void createTask(@RequestBody TaskInputDTO input) {
-        System.out.println(input);
-        Identifier identifier = new Identifier();
-        StringValueObject  title = new StringValueObject(input.title);
-        StringValueObject description = new StringValueObject(input.description);
-
-        Task task = new Task(identifier, title, description, input.dueDate);
-        repository.create(task);
+        createTaskService.execute(input);
     }
 
     @GetMapping("/task/{id}")
